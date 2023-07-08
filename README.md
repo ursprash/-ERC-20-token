@@ -1,4 +1,4 @@
-# -ERC-20-token
+# ERC-20-token
 1. Create the ERC-20 token 
 2. Set the name to “Degen”
 3. Set the symbol to “DGN”
@@ -41,3 +41,6 @@ approve: Sets the allowance for a spender to transfer tokens from the caller's a
 transferFrom: Transfers tokens from a specified address (sender) to another address (recipient) on behalf of the caller.
 mint: Mints new tokens and assigns them to a specified address. Only the contract owner can call this function.
 burn: Burns a specified amount of tokens from the caller's address, reducing both their balance and the total supply.
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
