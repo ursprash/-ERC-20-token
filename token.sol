@@ -4,8 +4,8 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract DegenToken is ERC20, Ownable {
-    constructor() ERC20("Degen", "DGN") {
+contract DegenGamingToken is ERC20, Ownable {
+    constructor() ERC20("Degen Gaming Token", "DGT") {
         _mint(msg.sender, 1000000000 * 10**decimals()); // Mint initial supply (1 billion tokens)
     }
 
@@ -20,8 +20,19 @@ contract DegenToken is ERC20, Ownable {
         return true;
     }
 
-    // Redeem tokens (burn)
-    function redeem(uint256 amount) public {
+    // Redeem tokens
+    function redeem(uint256 _value) external returns (bool success) {
+        require(balanceOf(msg.sender) >= _value, "Insufficient balance");
+        _burn(msg.sender, _value);
+        emit Redeem(msg.sender, _value);
+        return true;
+    }
+
+    // Burn tokens
+    function burn(uint256 amount) public {
         _burn(msg.sender, amount);
     }
+
+    // Event to emit when tokens are redeemed
+    event Redeem(address indexed account, uint256 value);
 }
