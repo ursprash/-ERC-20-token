@@ -4,9 +4,12 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract DegenGamingToken is ERC20, Ownable {
-    constructor() ERC20("Degen Gaming Token", "DGT") {
-        _mint(msg.sender, 1000000000 * 10**decimals()); // Mint initial supply (1 billion tokens)
+contract DegenToken is ERC20, Ownable {
+    mapping(uint256 => bool) public prizesRedeemed;
+    uint256 public prizeCost = 100; // Cost of each prize in DT tokens
+
+    constructor() ERC20("Degen Token", "DT") {
+        _mint(msg.sender, 10000000 * 10**decimals()); // Mint initial supply (1 billion tokens)
     }
 
     // Mint new tokens (only the owner can call this function)
@@ -21,12 +24,17 @@ contract DegenGamingToken is ERC20, Ownable {
     }
 
     // Redeem tokens
-    function redeem(uint256 _value) external returns (bool success) {
-        require(balanceOf(msg.sender) >= _value, "Insufficient balance");
-        _burn(msg.sender, _value);
-        emit Redeem(msg.sender, _value);
+    function redeem(uint256 prizeId) external returns (bool) {
+        require(!prizesRedeemed[prizeId], "Prize already redeemed");
+        require(balanceOf(msg.sender) >= prizeCost, "Insufficient balance");
+
+        _burn(msg.sender, prizeCost);
+        prizesRedeemed[prizeId] = true;
+        emit Redeem(msg.sender, prizeId);
+
         return true;
     }
+    
 
     // Burn tokens
     function burn(uint256 amount) public {
@@ -34,5 +42,5 @@ contract DegenGamingToken is ERC20, Ownable {
     }
 
     // Event to emit when tokens are redeemed
-    event Redeem(address indexed account, uint256 value);
+    event Redeem(address indexed account, uint256 prizeId);
 }
